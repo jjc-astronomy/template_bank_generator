@@ -6,13 +6,10 @@
 # Updated     : 11 April 2025
 # License     : GNU General Public License v3.0
 # =============================================================================
-# Description :
-# This code calculates how many orbital templates are required to cover a given parameter space range using the random template-bank algorithm.
-# =============================================================================
 
-
-
-"""This Module has been built to Calculate and Generate Random Templates based on Messenger et al. 2008 (arXiv:0809.5223).
+"""
+Description :
+This Module has been built to Calculate and Generate Random Templates based on Messenger et al. 2008 (arXiv:0809.5223).
 These templates are used to do a fully coherent search for circular binary orbits in radio observations.
 
       Receipe to Generate Random Template Bank!
@@ -30,8 +27,7 @@ These templates are used to do a fully coherent search for circular binary orbit
 
 5. Implement a MCMC based on metropolis hastings algorithm using square root of the determinant of the metric tensor as your constant density function. Write Results to file.
 
-6. Step 5 is optional and is only triggered if the user specifies a filename to write the results to. My recommendation for generating large template-banks is using the emcee version construct_random_template_bank_emcee.py
-
+6. Step 5 is optional and is only triggered if the user specifies a filename to write the results to. My recommendation for generating large template-banks is to first get the total templates you need from this code and pass that to the emcee version construct_random_template_bank_emcee.py
 
 """
 
