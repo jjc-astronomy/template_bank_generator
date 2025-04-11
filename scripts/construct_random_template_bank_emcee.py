@@ -144,6 +144,7 @@ template_bank = sampler.get_chain(flat=True)
 indices = np.random.choice(len(template_bank), args.templates, replace=False)
 final_template_bank = template_bank[indices]
 
+# Dump template bank to file
 with open(output_path + args.filename + '_gpu_format.txt', 'w') as f:
     f.write(f'# TEMPLATE BANK TECHNIQUE: RANDOM\n')
     f.write(f'# TOBS (h): {args.obs_time/60}\n')
@@ -161,6 +162,7 @@ with open(output_path + args.filename + '_gpu_format.txt', 'w') as f:
     for tpl in final_template_bank:
         f.write(f'{tpl[0]} {tpl[1]} {tpl[2]}\n')
 
+# Generate corner plot
 try:
     tau = sampler.get_autocorr_time()
     burnin = int(2 * np.max(tau))
