@@ -1,3 +1,14 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# =============================================================================
+# Author      : Vishnu Balakrishnan
+# Created     : 11 April 2025
+# License     : GNU General Public License v3.0
+# =============================================================================
+# Description :
+# This code splits a template bank into multiple parts for parallel filtering.
+# =============================================================================
+
 import os
 import argparse
 

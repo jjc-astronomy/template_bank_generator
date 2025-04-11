@@ -1,3 +1,15 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# =============================================================================
+# Author      : Vishnu Balakrishnan
+# Created     : 11 April 2025
+# License     : GNU General Public License v3.0
+# =============================================================================
+# Description :
+# Commonly used functions for template matching and detection statistic calculation.
+# =============================================================================
+
+
 import numpy as np
 from numba import njit
 from typing import Tuple

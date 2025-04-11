@@ -1,3 +1,16 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# =============================================================================
+# Author      : Vishnu Balakrishnan
+# Created     : 11 April 2025
+# License     : GNU General Public License v3.0
+# =============================================================================
+# Description :
+# This code compares a suggested template bank against an existing one and keeps
+# only non-overlapping ones. It uses multiprocessing and numba to speed up the comparison
+# =============================================================================
+
+
 import argparse
 import numpy as np
 from multiprocessing import Pool

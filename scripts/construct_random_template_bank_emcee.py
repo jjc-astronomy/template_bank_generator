@@ -1,3 +1,15 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# =============================================================================
+# Author      : Vishnu Balakrishnan
+# Created     : 11 April 2025
+# License     : GNU General Public License v3.0
+# =============================================================================
+# Description :
+# This code generates a random template bank for a user-defined number of templates. Run this script after calculating how many templates you need from calculate_required_random_templates_circular_orbit_searches.py
+# =============================================================================
+
+
 import numpy as np
 import sympy as sy
 sy.init_printing(use_unicode=True)
