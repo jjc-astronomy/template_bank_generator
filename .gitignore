@@ -8,6 +8,10 @@ __pycache__/
 
 **/*.bdm.db
 
+# Nextflow
+.nextflow.*
+work/
+.nextflow/
 
 # Distribution / packaging
 .Python
