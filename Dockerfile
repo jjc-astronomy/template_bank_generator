@@ -25,6 +25,10 @@ RUN pip install --upgrade pip && \
     numba \
     tqdm \
     matplotlib \
+    emcee \
+    corner \
+    schwimmbad \
+    h5py \
     sqlalchemy \
     python-dotenv \
     typing_extensions \
@@ -36,7 +40,8 @@ RUN pip install --upgrade pip && \
     cachetools \
     authlib \
     uncertainties \
-    loguru
+    loguru \ 
+    colorama
 
 # Expose port
 EXPOSE 80

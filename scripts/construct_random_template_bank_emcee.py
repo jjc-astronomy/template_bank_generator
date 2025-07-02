@@ -54,7 +54,7 @@ logger = logging.getLogger(__name__)
 
 # Symbolic computation
 f, tau, omega, psi, phi, t, T, a, pi, f0 = sy.symbols('f \\tau \\Omega \\psi \\phi t T a \\pi f_0')
-phi = 2 * pi * f * (t + tau * sy.sin(omega * t + psi))
+phi = 2 * pi * f * (t + tau * sy.sin(omega * t - psi))
 
 def time_average(a):
     return (1/T) * sy.integrate(a, (t, 0, T))
@@ -145,7 +145,7 @@ indices = np.random.choice(len(template_bank), args.templates, replace=False)
 final_template_bank = template_bank[indices]
 
 # Dump template bank to file
-with open(output_path + args.filename + '_gpu_format.txt', 'w') as f:
+with open(output_path + args.filename + '_peasoup_format.txt', 'w') as f:
     f.write(f'# TEMPLATE BANK TECHNIQUE: RANDOM\n')
     f.write(f'# TOBS (h): {args.obs_time/60}\n')
     f.write(f'# COVERAGE: {coverage}\n')
@@ -158,9 +158,15 @@ with open(output_path + args.filename + '_gpu_format.txt', 'w') as f:
     f.write(f'# INCLINATION ANGLE FRACTION: {alpha}\n')
     f.write(f'# ORBITAL PHASE MIN (rad): 0\n')
     f.write(f'# ORBITAL PHASE MAX (rad): {max_phase}\n')
-    f.write('# ANGULAR_VELOCITY ASINI/C ORB_PHASE\n')
+    f.write(f'# NTEMPLATES: {args.templates + 1}\n')  # Add 1 for the asini/c=0 template
+    f.write('# ANGULAR_VELOCITY (rad/s) ASINI/C (lt-s) ORB_PHASE (rad)\n')
     for tpl in final_template_bank:
         f.write(f'{tpl[0]} {tpl[1]} {tpl[2]}\n')
+
+    # Add the extra template: same omega and phase as a random template, but asini/c = 0 for sensitivity towards isolated pulsars.
+    random_tpl = random.choice(final_template_bank)
+    omega, _, orb_phase = random_tpl
+    f.write(f'{omega} 0.0 {orb_phase}\n')
 
 # Generate corner plot
 try:
@@ -179,7 +185,8 @@ except Exception as e:
 samples[:, 0] = (2 * np.pi / samples[:, 0]) / 3600
 samples[:, 2] = np.degrees(samples[:, 2])
 all_samples = np.concatenate((samples, log_probs[:, None]), axis=1)
-labels = ["Orbital Period \n (hrs)", "Projected Radius \n (lt-s)", "Orbital Phase \n (degrees)", r"log$_{10}$ $\\left(\\sqrt{|det(\\gamma_{\\alpha \\beta})|}\\right)$"]
+#labels = ["Orbital Period \n (hrs)", "Projected Radius \n (lt-s)", "Orbital Phase \n (degrees)", r"log$_{10}$ $\\left(\\sqrt{|det(\\gamma_{\\alpha \\beta})|}\\right)$"]
+labels = ["Orbital Period \n (hrs)", "Projected Radius \n (lt-s)", "Orbital Phase \n (degrees)", r"$\log_{10} \left(\sqrt{|\det(\gamma_{\alpha \beta})|}\right)$"]
 
 figure = corner.corner(all_samples, labels=labels, color='black', title_kwargs={"fontsize": 12},
                        smooth=True, smooth1d=True, scale_hist=True,

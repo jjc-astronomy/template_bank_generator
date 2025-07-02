@@ -72,7 +72,7 @@ if __name__ == "__main__":
     parser.add_argument("--freq", type=float, required=True, help="Max Spin Frequency of template bank in Hz")
     parser.add_argument("--mismatch_orbital", type=float, default=0.1, help="Allowed mismatch due to orbital params")
     parser.add_argument("--mismatch_spin_freq", type=float, default=0.1, help="Allowed mismatch due to spin frequency scalloping")
-    parser.add_argument("--nmc", type=int, default=10000, help="Number of Monte Carlo points for integration")
+    parser.add_argument("--nmc", type=int, default=2000, help="Number of Monte Carlo points for integration")
     parser.add_argument("--log_interval", type=int, default=60, help="Interval (s) between status logs. (default: 60s)")
     parser.add_argument("--verbose", action="store_true", default=False, help="Enable detailed logging")
     parser.add_argument("--f_search_range", type=float, default=1.3, help="Frequency search range in Hz. Default: 1.3Hz")

@@ -38,6 +38,8 @@ import os
 import sympy as sy
 import argparse
 from multiprocessing import Pool
+from colorama import Fore, Style, init
+init(autoreset=True)
 
 parser = argparse.ArgumentParser(description='Calculate required templates for a coherent keplerian circular orbit search based on Messenger at al. 2008 and generate template-bank based on Metropolis hastings')
 parser.add_argument('-o', '--output_path', help='Output path to save results',  default="generated_template_banks/")
@@ -63,7 +65,7 @@ f, tau, omega, psi, phi, t, T, a, pi, f0 = sy.symbols('f \tau \Omega \psi \\phi 
 sy.init_printing(use_unicode=True) # pretty printing
 
 # Phase Model for Circular Binary Orbits
-phi = 2 * pi * f * (t + tau * sy.sin(omega * t + psi))
+phi = 2 * pi * f * (t + tau * sy.sin(omega * t - psi))
 
 def time_average(a):
     b = (1/T) * sy.integrate(a, (t, 0, T))
@@ -124,6 +126,7 @@ coverage = args.coverage
 mismatch = args.mismatch
 fastest_spin_period_ms = args.spin_period
 freq = 1 / (fastest_spin_period_ms * 1e-03)
+min_initial_orbital_phase = 0.0
 max_initial_orbital_phase = 2 * np.pi
 probability = calculate_alpha(alpha, max_companion_mass, min_pulsar_mass, min_pulsar_mass, max_companion_mass)
 highest_angular_velocity = 2 * np.pi / p_orb_upper_limit
@@ -149,9 +152,51 @@ estimated_volume_integral_error = volume_element * np.std(vals) / np.sqrt(volume
 
 print('Volume Integral: ', volume_integral_result, 'Volume Integral Error: ', estimated_volume_integral_error)
 print('Volume integral error is: %.2f' % ((estimated_volume_integral_error/volume_integral_result) * 100), ' %')
-total_templates_targed_search = number_templates(3, coverage, mismatch, np.around(volume_integral_result))
+total_templates_targeted_search = number_templates(3, coverage, mismatch, np.around(volume_integral_result))
 
-print('observation time (mins):', obs_time/60, 'mass companion:', max_companion_mass, 'orbital period low (hrs):', p_orb_low_limit/3600, 'orbital period high (hrs):', p_orb_upper_limit/3600, 'spin period (ms):', (1/freq) * 1e+3, 'prob:', probability, 'templates: ', total_templates_targed_search, 'integration error percentage: ', (estimated_volume_integral_error/volume_integral_result) * 100, 'coverage: ', coverage, 'mismatch: ', mismatch, 'phase: ', max_initial_orbital_phase)
+
+
+phase_unit = np.pi
+max_phase_pi = max_initial_orbital_phase / phase_unit
+min_phase_pi = min_initial_orbital_phase / phase_unit  
+
+print("\n" + "="*40)
+print(Fore.CYAN + Style.BRIGHT + "=== Circular Orbit Search (Random Template Bank Algorithm) Summary ===" + Style.RESET_ALL)
+
+print(f"{Fore.YELLOW}Volume Integral:{Style.RESET_ALL} {volume_integral_result:.4f}")
+print(f"{Fore.YELLOW}Volume Integral Error:{Style.RESET_ALL} {estimated_volume_integral_error:.4f}")
+print(f"{Fore.YELLOW}Volume Integral Error Percentage:{Style.RESET_ALL} {(estimated_volume_integral_error / volume_integral_result) * 100:.2f}%")
+print(f"{Fore.MAGENTA}Coverage:{Style.RESET_ALL} {coverage:.3f}")
+print(f"{Fore.MAGENTA}Mismatch:{Style.RESET_ALL} {mismatch:.3f}")
+
+print(f"{Fore.GREEN}Observation time:{Style.RESET_ALL} {obs_time / 60:.2f} min")
+print(f"{Fore.GREEN}Minimum pulsar mass:{Style.RESET_ALL} {min_pulsar_mass:.2f} Msun")
+print(f"{Fore.GREEN}Maximum companion mass:{Style.RESET_ALL} {max_companion_mass:.2f} Msun")
+
+if p_orb_low_limit < 3600:
+    print(f"{Fore.GREEN}Orbital period low limit:{Style.RESET_ALL} {p_orb_low_limit / 60:.2f} min")
+else:
+    print(f"{Fore.GREEN}Orbital period low limit:{Style.RESET_ALL} {p_orb_low_limit / 3600:.2f} hr")
+
+if p_orb_upper_limit < 3600:
+    print(f"{Fore.GREEN}Orbital period high limit:{Style.RESET_ALL} {p_orb_upper_limit / 60:.2f} min")
+else:
+    print(f"{Fore.GREEN}Orbital period high limit:{Style.RESET_ALL} {p_orb_upper_limit / 3600:.2f} hr")
+
+print(f"{Fore.GREEN}Minimum initial orbital phase:{Style.RESET_ALL} {min_phase_pi:.2f} π rad")
+print(f"{Fore.GREEN}Maximum initial orbital phase:{Style.RESET_ALL} {max_phase_pi:.2f} π rad")
+print(f"{Fore.CYAN}Fastest pulsar spin period:{Style.RESET_ALL} {(1 / freq) * 1e3:.2f} ms")
+print(f"{Fore.CYAN}Detection probability due to asini fraction:{Style.RESET_ALL} {probability:.3f}")
+
+if total_templates_targeted_search >= 1e6:
+    print(f"{Fore.RED}Total orbital templates per DM trial:{Style.RESET_ALL} {total_templates_targeted_search / 1e6:.2f} million")
+else:
+    print(f"{Fore.RED}Total orbital templates per DM trial:{Style.RESET_ALL} {total_templates_targeted_search:.0f}")
+
+
+
+print("="*40 + "\n")
+
 
 if not args.output_filename:
     sys.exit()
