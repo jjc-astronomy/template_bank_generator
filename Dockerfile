@@ -21,6 +21,7 @@ RUN pip install --upgrade pip && \
     pip install \
     numpy \
     pandas \
+    scipy \
     sympy \
     numba \
     tqdm \

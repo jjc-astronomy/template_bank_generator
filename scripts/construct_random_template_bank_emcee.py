@@ -17,6 +17,7 @@ import emcee
 from multiprocessing import Pool
 from schwimmbad import MPIPool
 import multiprocessing, corner
+import random
 
 # Argument parser
 parser = argparse.ArgumentParser(description='Generate a template-bank for a user-defined no. of templates for coherent full keplerian circular orbit search')
@@ -112,6 +113,7 @@ coverage, mismatch, ncpus = args.coverage, args.mismatch, args.ncpus
 spin_freq = 1/(args.spin_period * 1e-03)
 max_phase = 2 * np.pi
 output_path = args.output_path
+os.makedirs(output_path, exist_ok=True)
 low_omega = 2 * np.pi / p_orb_high
 high_omega = 2 * np.pi / p_orb_low
 
@@ -191,4 +193,5 @@ labels = ["Orbital Period \n (hrs)", "Projected Radius \n (lt-s)", "Orbital Phas
 figure = corner.corner(all_samples, labels=labels, color='black', title_kwargs={"fontsize": 12},
                        smooth=True, smooth1d=True, scale_hist=True,
                        levels=(0.1175031, 0.39346934, 0.67534753, 0.86466472))
-figure.savefig(output_path + args.filename + '_corner.pdf')
+#figure.savefig(output_path + args.filename + '_corner.pdf')
+figure.savefig(output_path + args.filename + '_corner.png')
