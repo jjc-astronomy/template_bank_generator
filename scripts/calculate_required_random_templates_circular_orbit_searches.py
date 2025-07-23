@@ -150,8 +150,6 @@ volume_element = ((2 * np.pi)/p_orb_low_limit - (2 * np.pi)/p_orb_upper_limit) *
 volume_integral_result = volume_element * np.mean(vals)
 estimated_volume_integral_error = volume_element * np.std(vals) / np.sqrt(volume_integral_iterations)
 
-print('Volume Integral: ', volume_integral_result, 'Volume Integral Error: ', estimated_volume_integral_error)
-print('Volume integral error is: %.2f' % ((estimated_volume_integral_error/volume_integral_result) * 100), ' %')
 total_templates_targeted_search = number_templates(3, coverage, mismatch, np.around(volume_integral_result))
 
 
