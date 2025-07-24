@@ -41,7 +41,7 @@ Use the script:
 python scripts/calculate_required_random_templates_circular_orbit_searches.py
 ```
 
-This uses volume estimates from [Messenger et al. 2008](https://ui.adsabs.harvard.edu/abs/2009PhRvD..79j4017M/abstract) and generates a template bank via a Metropolis-Hastings algorithm.
+This uses the algorithm from [Messenger et al. 2008](https://ui.adsabs.harvard.edu/abs/2009PhRvD..79j4017M/abstract) and generates a random template bank via a Metropolis-Hastings algorithm.
 
 ### Arguments
 
