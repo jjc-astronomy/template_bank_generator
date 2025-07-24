@@ -142,7 +142,8 @@ Outputs:
 If you use this software in your research, please cite:
 
 > **Balakrishnan et al. (2022)**, [MNRAS, 511, 1265](https://ui.adsabs.harvard.edu/abs/2022MNRAS.511.1265B/abstract)
-> **Knispel et al. (2011)**, [PhD Thesis, Hannover]([https://ui.adsabs.harvard.edu/abs/2022MNRAS.511.1265B/abstract](https://ui.adsabs.harvard.edu/abs/2011ApJ...732L...1K/abstract))
+
+> **Knispel et al. (2011)**, [PhD Thesis, 2011](https://ui.adsabs.harvard.edu/abs/2011ApJ...732L...1K/abstract)
 
 
 ---
