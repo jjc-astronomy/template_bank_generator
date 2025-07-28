@@ -1,6 +1,6 @@
 # Template Bank Generator for Binary Pulsar Searches
 
-This repository contains scripts to generate random and stochastic template banks for binary pulsar searches in radio observations. These template banks are compatible with [peasoup (Keplerian branch)](https://github.com/vishnubk/peasoup/tree/keplerian) for GPU-based searches.
+This repository contains scripts to generate random and stochastic template banks for binary pulsar searches in radio observations. These template banks are compatible with [peasoup](https://github.com/vishnubk/peasoup/tree/master) for GPU-based searches.
 
 ## Installation
 
