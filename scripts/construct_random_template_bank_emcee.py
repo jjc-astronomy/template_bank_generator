@@ -117,9 +117,9 @@ os.makedirs(output_path, exist_ok=True)
 low_omega = 2 * np.pi / p_orb_high
 high_omega = 2 * np.pi / p_orb_low
 
-ndim, nwalkers = 3, 1500
-np.random.seed(42)
-mcmc_steps = math.ceil(args.templates / nwalkers)
+ndim, nwalkers = 3, 128 #jjc
+pre_burnin = 5000
+#np.random.seed(42)
 filename = output_path + args.filename + '.h5'
 backend = emcee.backends.HDFBackend(filename)
 backend.reset(nwalkers, ndim)
@@ -134,17 +134,27 @@ with Pool(processes=ncpus) as pool:
     sampler = emcee.EnsembleSampler(nwalkers, ndim, log_posterior, backend=backend,
         args=[spin_freq, obs_time, low_omega, high_omega, max_phase], pool=pool)
     start = time.time()
-    state = sampler.run_mcmc(initial_guess, 100, progress=True)
+    state = sampler.run_mcmc(initial_guess, pre_burnin, progress=True)
     logger.info("Burn-In Phase took {:.1f} seconds".format(time.time() - start))
-    sampler.reset()
+    tau = sampler.get_autocorr_time()
+    burnin = int(2 * np.max(tau))
+    thin = int(0.5 * np.min(tau))
+    logger.info(f"Using burn-in of {burnin} and thinning of {thin} based on autocorrelation time.")
+    mcmc_steps = math.ceil(args.templates / nwalkers * thin * 1.1) - pre_burnin
+    #sampler.reset()
     start = time.time()
     sampler.run_mcmc(state, mcmc_steps, progress=True)
     logger.info("Main Phase took {:.1f} seconds".format(time.time() - start))
 
 sampler = emcee.backends.HDFBackend(filename, read_only=True)
-template_bank = sampler.get_chain(flat=True)
-indices = np.random.choice(len(template_bank), args.templates, replace=False)
-final_template_bank = template_bank[indices]
+tau = sampler.get_autocorr_time()
+burnin = int(2 * np.max(tau))
+thin = int(0.5 * np.min(tau))
+logger.info(f"Using burn-in of {burnin} and thinning of {thin} based on autocorrelation time.")
+#template_bank = sampler.get_chain(discard=burnin, flat=True, thin=thin)
+final_template_bank = sampler.get_chain(discard=burnin, flat=True, thin=thin)
+#indices = np.random.choice(len(template_bank), args.templates, replace=False)
+#final_template_bank = template_bank[indices]
 
 # Dump template bank to file
 with open(output_path + args.filename + '_peasoup_format.txt', 'w') as f:
